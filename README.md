@@ -1,39 +1,92 @@
-# 📚 Book Management API (Tugas PPL 1)
+# Book Management API (Tugas PPL 1)
 
-![CI & Security Scan](https://github.com/isomorfisma/tugas-ppl-1/actions/workflows/ci-cs.yml/badge.svg)
+[![CI & Security Scan](https://github.com/isomorfisma/tugas-ppl-1/actions/workflows/ci-cs.yml/badge.svg)](https://github.com/isomorfisma/tugas-ppl-1/actions)
 
-## 1. Deskripsi Project
-Proyek ini adalah RESTful API sederhana untuk **Manajemen Buku (Book API)** yang dibangun menggunakan **Node.js dan Express**. Proyek ini merupakan tugas mata kuliah Proyek Perangkat Lunak 1 yang terintegrasi penuh dengan ekosistem Docker untuk *containerization* dan GitHub Actions untuk otomatisasi *Continuous Integration* (CI) serta *Continuous Security* (CS).
+## Deskripsi
+Repository ini berisi tugas mata kuliah Proyek Perangkat Lunak 1. Sistem yang dibuat adalah REST API sederhana untuk manajemen data buku. API ini dibangun menggunakan Node.js (Express), dibungkus menggunakan Docker, dan sudah terintegrasi dengan GitHub Actions untuk CI (Unit Testing) dan CS (Security Scan).
+
+Data disimpan sementara di dalam memori (array) sesuai kebutuhan minimal tugas.
 
 ---
 
-## 2. Dokumentasi API
+## Dokumentasi API
+Base URL: `http://localhost:3000/api`
 
-API ini menerapkan standar RESTful dengan format respons menggunakan JSON. Data disimpan menggunakan *in-memory array* (sementara) untuk keperluan demonstrasi CRUD.
+### 1. Get All Books
+- **URL:** `/books`
+- **Method:** `GET`
+- **Response Success (200 OK):**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Belajar Docker",
+      "author": "John Doe"
+    }
+  ]
+}
+```
 
-### Endpoint List
-| Method | Endpoint | Deskripsi |
-| :--- | :--- | :--- |
-| `GET` | `/api/books` | Mengambil daftar semua buku |
-| `POST` | `/api/books` | Menambahkan buku baru |
-| `PUT` | `/api/books/:id` | Memperbarui data buku berdasarkan ID |
-| `DELETE` | `/api/books/:id` | Menghapus buku berdasarkan ID |
-
-### Format Response (JSON)
-
-**✅ Contoh Success Response (200 OK / 201 Created):**
+### 2. Create New Book
+- **URL:** `/books`
+- **Method:** `POST`
+- **Body Request (JSON):**
+```json
+{
+  "title": "Buku PPL",
+  "author": "Fulan"
+}
+```
+- **Response Success (201 Created):**
 ```json
 {
   "message": "Book created",
   "data": {
-    "id": 1,
-    "title": "Belajar Docker dan CI/CD",
-    "author": "John Doe"
+    "id": 2,
+    "title": "Buku PPL",
+    "author": "Fulan"
   }
 }
 ```
 
-**❌ Contoh Error Response (404 Not Found):**
+### 3. Update Book
+- **URL:** `/books/:id`
+- **Method:** `PUT`
+- **Body Request (JSON):**
+```json
+{
+  "title": "Buku PPL Edisi Revisi"
+}
+```
+- **Response Success (200 OK):**
+```json
+{
+  "message": "Book updated",
+  "data": {
+    "id": 2,
+    "title": "Buku PPL Edisi Revisi",
+    "author": "Fulan"
+  }
+}
+```
+- **Response Error (404 Not Found):**
+```json
+{
+  "message": "Book not found"
+}
+```
+
+### 4. Delete Book
+- **URL:** `/books/:id`
+- **Method:** `DELETE`
+- **Response Success (200 OK):**
+```json
+{
+  "message": "Book deleted"
+}
+```
+- **Response Error (404 Not Found):**
 ```json
 {
   "message": "Book not found"
@@ -42,54 +95,40 @@ API ini menerapkan standar RESTful dengan format respons menggunakan JSON. Data 
 
 ---
 
-## 3. Panduan Instalasi (Docker)
+## Cara Menjalankan Aplikasi (Docker)
+Pastikan sistem kamu sudah terinstall Docker dan Docker Compose.
 
-Aplikasi ini sudah di-docker-isasi sepenuhnya. Kamu tidak perlu menginstal Node.js di mesin lokal, cukup pastikan **Docker** dan **Docker Compose (V2)** sudah terinstal di sistem Linux Mint kamu.
-
-### Langkah-langkah menjalankan aplikasi:
-1. *Clone* repositori ini:
-   ```bash
-   git clone [https://github.com/](https://github.com/)isomorfisma/tugas-ppl-1.git
-   cd tugas-ppl-1
-   ```
-2. Jalankan perintah Docker Compose:
-   ```bash
-   docker compose up -d --build
-   ```
-3. API siap diakses melalui: `http://localhost:3000/api/books`
-4. Untuk mematikan *container*, jalankan:
-   ```bash
-   docker compose down
-   ```
-
-### Informasi Port:
-* **Host Port:** `3000` (Port yang diakses dari komputermu)
-* **Container Port:** `3000` (Port yang diekspos oleh aplikasi Node.js di dalam Docker)
+1. Clone repo ini ke lokal:
+```bash
+git clone [https://github.com/](https://github.com/)isomorfisma/tugas-ppl-1.git
+cd tugas-ppl-1
+```
+2. Build dan jalankan container API:
+```bash
+docker compose up -d --build
+```
+3. Test API via Postman, Insomnia, atau Curl di `http://localhost:3000/api/books`.
+4. Untuk mematikan dan menghapus container:
+```bash
+docker compose down
+```
 
 ---
 
-## 4. Alur Kerja Git (Git Workflow)
+## Git Workflow & Standar Commit
+Repository ini menerapkan **Feature Branch Flow**:
+- `main`: Kode stabil untuk production.
+- `develop`: Branch integrasi utama.
+- `feat/*`, `fix/*`, `docs/*`: Branch untuk pengerjaan tugas spesifik.
 
-Proyek ini menggunakan **Feature Branch Flow** untuk kolaborasi dan manajemen versi yang rapi:
-* `main`: Berisi kode *production-ready* yang stabil.
-* `develop`: Branch integrasi utama untuk pengujian sebelum rilis ke `main`.
-* `feat/api-crud`: Branch fitur tempat pengembangan API CRUD, Docker, dan CI/CD dilakukan.
-
-### Bukti Penggunaan Conventional Commits
-Semua *commit* di repositori ini mematuhi standar *Conventional Commits*. Contoh riwayat *commit*:
-* `feat: implementasi CRUD API buku beserta unit test`
-* `chore: menambahkan konfigurasi Docker dan docker-compose`
-* `ci: menambahkan GitHub Actions untuk unit test dan security scan`
-* `fix: update perintah docker compose pada workflow github actions`
-* `docs: menambahkan file README.md dengan dokumentasi lengkap`
+Format commit wajib mengikuti standar **Conventional Commits** (contoh: `feat: implementasi fungsi delete`, `fix: error handling di route books`).
 
 ---
 
-## 5. Status Automasi (GitHub Actions)
+## Otomatisasi (GitHub Actions)
+Terdapat workflow di `.github/workflows/ci-cs.yml` yang akan tereksekusi otomatis setiap ada *Push* atau *Pull Request* ke branch `main` dan `develop`. 
 
-Proyek ini dilengkapi dengan *pipeline* otomatisasi menggunakan file `.github/workflows/ci-cs.yml` yang berjalan setiap kali ada *Push* atau *Pull Request* ke branch `main` dan `develop`.
-
-Alur kerjanya meliputi:
-1.  **Unit Testing (CI):** Menjalankan *script* `npm test` (menggunakan Jest dan Supertest) untuk memastikan endpoint API berfungsi dengan baik tanpa *bug*.
-2.  **Security Scan (CS):** Menjalankan `npm audit --audit-level=high` untuk memindai kerentanan keamanan (*vulnerabilities*) pada *dependencies* Node.js yang digunakan.
-3.  **Docker Build Test:** Memastikan `Dockerfile` dapat di-*build* dengan sukses di *environment* server tanpa error.
+Step yang dijalankan meliputi:
+1. **Unit Test (CI):** Menguji fungsionalitas API menggunakan Jest dan Supertest.
+2. **Security Scan (CS):** Memeriksa kerentanan library yang digunakan via `npm audit`.
+3. **Docker Build Test:** Simulasi build Docker image untuk memastikan konfigurasi Dockerfile aman dan tidak error.
