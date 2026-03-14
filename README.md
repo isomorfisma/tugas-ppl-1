@@ -100,7 +100,7 @@ Pastikan sistem kamu sudah terinstall Docker dan Docker Compose.
 
 1. Clone repo ini ke lokal:
 ```bash
-git clone [https://github.com/](https://github.com/)isomorfisma/tugas-ppl-1.git
+git clone https://github.com/isomorfisma/tugas-ppl-1.git
 cd tugas-ppl-1
 ```
 2. Build dan jalankan container API:
