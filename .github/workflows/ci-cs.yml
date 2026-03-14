@@ -1,0 +1,33 @@
+name: CI & Security Scan
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-test-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Unit Testing (CI)
+      run: npm test
+
+    - name: Run Security Scan (CS)
+      # Menggunakan npm audit untuk mencari vulnerability pada dependencies
+      run: npm audit --audit-level=high
+
+    - name: Test Docker Build
+      run: docker-compose build
