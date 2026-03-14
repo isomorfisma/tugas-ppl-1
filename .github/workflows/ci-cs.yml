@@ -30,4 +30,4 @@ jobs:
       run: npm audit --audit-level=high
 
     - name: Test Docker Build
-      run: docker-compose build
+      run: docker compose build
